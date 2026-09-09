@@ -1,0 +1,62 @@
+protocol:
+  name: adabu-vibecode
+  display_name: "Adabù VibeCode Protocol"
+  version: 3
+
+project:
+  name: ""
+  slug: ""
+  # lab | client | internal | personal | infra | unknown
+  type: unknown
+  # repo   → progetto versionato, Git è la verità tecnica
+  # infra  → gestione macchine/servizi: la verità è lo stato reale della macchina
+  # local  → progetto senza Git: STATE.md e HANDOFF.md sono l'UNICA memoria
+  runtime: repo
+
+repository:
+  current_branch: ""
+  main_branch: ""
+
+agents:
+  primary: null
+  worked_so_far: []
+  constraints: []
+
+# ─────────────────────────────────────────────────────────────────────
+# SYNC — sempre e solo in uscita: repo → esterno. Mai il contrario.
+#
+# bound: false  → l'agente NON sincronizza e NON indovina la destinazione.
+#                 Chiede a Federico URL e cadenza, poi compila qui.
+#
+# cadence:
+#   always       → ad ogni handoff di fine sessione
+#   on_command   → solo quando Federico dice "sincronizza"
+#   on_milestone → solo su cambiamento sostanziale (definizione in RULES.md)
+#   never        → mai
+# ─────────────────────────────────────────────────────────────────────
+sync:
+  direction: repo_to_external_only
+
+  clickup:
+    bound: false
+    url: null            # incollato da Federico, es. https://app.clickup.com/t/86cam2z1x
+    task_id: null        # estratto dall'URL
+    cadence: on_command
+    payload: [state_summary, tasks_now_next]
+    last_synced: null
+
+  client_brain:
+    bound: false
+    url: null            # documento 00_[CLIENTE]_AI
+    doc_id: null
+    read_only: true      # SOLA LETTURA da una sessione di sviluppo
+    cadence: never
+
+  mente_ai:
+    bound: false
+    project: null
+    # work-clienti | operations | ai-workspace
+    chapter: null
+    cadence: on_milestone
+    payload: [decisions]
+    last_synced: null
