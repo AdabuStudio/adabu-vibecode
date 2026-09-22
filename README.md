@@ -83,4 +83,4 @@ avc-update .
 
 ## Versione
 
-Protocollo v2 — vedi `00_PROTOCOL/.protocol-version` nei repo installati.
+Protocollo v6 — vedi `00_PROTOCOL/.protocol-version` nei repo installati.

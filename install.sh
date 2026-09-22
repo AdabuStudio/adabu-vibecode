@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-PROTOCOL_VERSION=5
+PROTOCOL_VERSION=6
 DIR="00_PROTOCOL"
 TARGET="${1:-$PWD}"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

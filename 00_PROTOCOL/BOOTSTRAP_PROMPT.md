@@ -173,6 +173,13 @@ Usa `Status: inferred` se dedotte.
 
 Ricostruisci ciò che probabilmente stava facendo Kimi e indica il prossimo passo più sensato.
 
+## Memoria esterna in lettura
+
+Se hai il tool MENTE (`mente-ai`), prima di ricostruire cerca il progetto nella
+memoria: decisioni e contesto salvati da sessioni precedenti. È una fonte in più,
+non una verità: se contraddice codice o git, vince il repo e la discrepanza va in
+`HANDOFF.md`. Se non hai il tool, salta questo passo senza segnalarlo.
+
 ## Routing esterno
 
 NON sincronizzare ClickUp o Mente-AI durante questo bootstrap.
@@ -180,8 +187,14 @@ NON sincronizzare ClickUp o Mente-AI durante questo bootstrap.
 Se in `PROJECT.yaml` una destinazione ha `bound: false`, alla fine dell'analisi
 chiedi a Federico — una domanda per destinazione, tutte insieme, non una alla volta:
 
-1. **ClickUp** — incolla l'URL del task, oppure "no".
-2. **Mente-AI** — project e chapter (`work-clienti` | `operations` | `ai-workspace`), oppure "no".
+1. **ClickUp** — incolla l'URL, oppure "no". Un **task** se è un progetto cliente
+   (sta nell'area del cliente), una **lista** se è un lab o un prodotto con vita
+   propria (lista dedicata in 05-LAB). Non agganciare liste generiche condivise
+   tra più progetti, tipo "Task Generici": chiedi un task dedicato.
+2. **Memoria AI** — non è una domanda di scelta. Vedi la regola in `RULES.md`:
+   se hai il tool MENTE, l'aggancio a `mente-ai` è automatico e chiedi solo conferma
+   del nome `project`; se non ce l'hai, salta senza chiedere niente.
+   `mind-exsafe` non si propone mai.
 3. **Cervello cliente** — URL del documento `00_[CLIENTE]_AI` se esiste, solo per lettura.
 4. Per ciascuna destinazione agganciata: cadenza `always` / `on_command` / `on_milestone`.
 

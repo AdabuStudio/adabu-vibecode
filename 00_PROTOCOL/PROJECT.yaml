@@ -1,7 +1,7 @@
 protocol:
   name: adabu-vibecode
   display_name: "Adabù VibeCode Protocol"
-  version: 3
+  version: 6
 
 project:
   name: ""
@@ -39,8 +39,12 @@ sync:
 
   clickup:
     bound: false
-    url: null            # incollato da Federico, es. https://app.clickup.com/t/86cam2z1x
-    task_id: null        # estratto dall'URL
+    url: null            # incollato da Federico
+    # Uno solo dei due, dedotto dall'URL:
+    #   .../t/<id>        → task_id  (progetto cliente: un task nell'area del cliente)
+    #   .../li/<id>       → list_id  (lab/prodotto: lista dedicata in 05-LAB)
+    task_id: null
+    list_id: null
     cadence: on_command
     payload: [state_summary, tasks_now_next]
     last_synced: null
@@ -52,10 +56,16 @@ sync:
     read_only: true      # SOLA LETTURA da una sessione di sviluppo
     cadence: never
 
+  # Chiave "mente_ai" mantenuta per compatibilità: vale anche per Mind Exsafe.
   mente_ai:
     bound: false
+    # mente-ai    → memoria personale di Federico (mcp.mente.zusho.it).
+    #               Si usa SEMPRE se l'agente ha il tool MENTE disponibile;
+    #               chi non ce l'ha (il team) salta in silenzio.
+    # mind-exsafe → SOLO su richiesta esplicita. Mai proposta.
+    instance: null
     project: null
-    # work-clienti | operations | ai-workspace
+    # legacy: lo scope lo assegna il routing di MENTE dal project. Lasciare null.
     chapter: null
     cadence: on_milestone
     payload: [decisions]

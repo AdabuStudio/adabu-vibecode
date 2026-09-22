@@ -148,10 +148,23 @@ Ogni destinazione in `PROJECT.yaml` ha `bound: true|false`.
 
 Con `bound: false` l'agente **non sincronizza e non indovina**. Chiede a Federico:
 
-> Destinazione ClickUp per questo progetto? Incolla l'URL del task.
+> Destinazione ClickUp per questo progetto? Incolla l'URL (task o lista).
 > Cadenza: `always` (ogni fine sessione) / `on_command` (solo se te lo chiedo) / `on_milestone` (solo su cambiamenti sostanziali)?
 
-Ricevuto l'URL: estrae l'id, compila `url`, l'id e `cadence`, mette `bound: true`.
+Ricevuto l'URL: deduce dal percorso se è un task (`/t/<id>` → `task_id`) o una
+lista (`/li/<id>` → `list_id`), compila **uno solo** dei due, più `url` e `cadence`,
+e mette `bound: true`. Se l'URL non è né l'uno né l'altro, lo chiede di nuovo invece
+di indovinare.
+
+Il comportamento cambia di conseguenza:
+
+- `task_id` → il sync aggiorna la descrizione del task e aggiunge un commento.
+- `list_id` → il sync lavora sui task dentro la lista; non crea task nuovi senza
+  approvazione esplicita.
+
+Non agganciare mai una lista generica condivisa tra più progetti: i task si
+mescolano e il sync scrive nel posto di qualcun altro. In quel caso si chiede un
+task dedicato.
 `url` resta salvato in chiaro perché Federico possa verificare a colpo d'occhio
 che la destinazione sia quella giusta.
 
@@ -201,10 +214,23 @@ Dopo la scrittura, **rileggere** per confermare che sia andata a buon fine.
 
 ### Routing suggerito quando Federico non specifica
 
-- `lab` → Mente-AI `ai-workspace`; ClickUp solo se lo chiede.
-- `client` → ClickUp area cliente + Mente-AI `work-clienti`.
-- `internal` → ClickUp area interna + Mente-AI `operations`.
-- `infra` → Mente-AI `operations`.
+Istanza di memoria — dipende da chi lavora, non dal progetto:
+
+- `mente-ai` è la memoria personale di Federico. **Se l'agente ha il tool MENTE, la
+  usa sempre**: aggancio automatico al bootstrap, lettura del contesto all'inizio,
+  scrittura secondo cadenza. Nessuna domanda, salvo confermare il nome `project`.
+- **Se l'agente non ha il tool** (sessione di un membro del team): salta mente-ai in
+  silenzio. Non chiedere, non segnalare come mancanza, non mettere `bound: false`
+  se era `true` — il repo è condiviso e l'aggancio resta valido per chi ha il tool.
+- `mind-exsafe` **solo su richiesta esplicita**. Mai proporla, mai dedurla dal tipo
+  di progetto o dal cliente.
+- Mai entrambe sullo stesso progetto.
+- Lo scope interno lo assegna MENTE dal `project`: l'agente non sceglie chapter.
+
+- `lab` → ClickUp lista dedicata in 05-LAB, se Federico la vuole.
+- `client` → ClickUp task nell'area del cliente.
+- `internal` → ClickUp area interna.
+- `infra` → ClickUp solo se il lavoro è tracciato come task.
 - `personal` → chiedere.
 - `unknown` → non proporre nulla.
 
