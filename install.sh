@@ -75,8 +75,11 @@ done
 if grep -qE '^  version: [0-9]+' "$DIR/PROJECT.yaml"; then
   CUR=$(sed -nE 's/^  version: ([0-9]+).*/\1/p' "$DIR/PROJECT.yaml" | head -1)
   if [ "$CUR" != "$PROTOCOL_VERSION" ]; then
-    sed -i.bak -E "0,/^  version: [0-9]+/s//  version: $PROTOCOL_VERSION/" "$DIR/PROJECT.yaml"
-    rm -f "$DIR/PROJECT.yaml.bak"
+    # awk e non `sed 0,/re/`: quell'indirizzo è solo GNU, sul sed BSD di macOS
+    # non fa nulla. Cambia solo la prima occorrenza (protocol.version).
+    awk -v v="$PROTOCOL_VERSION" '!done && /^  version: [0-9]+/ { sub(/[0-9]+/, v); done=1 } { print }' \
+      "$DIR/PROJECT.yaml" > "$DIR/PROJECT.yaml.tmp"
+    mv "$DIR/PROJECT.yaml.tmp" "$DIR/PROJECT.yaml"
     echo "  allineato   $DIR/PROJECT.yaml  (protocol.version $CUR → $PROTOCOL_VERSION)"
   fi
 fi
