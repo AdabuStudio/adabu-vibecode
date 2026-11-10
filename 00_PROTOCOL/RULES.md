@@ -2,17 +2,31 @@
 
 ## Prima di lavorare
 
-Ogni agente deve:
+Il protocollo si legge su **due livelli**. Leggerlo tutto ad ogni avvio costa
+migliaia di token di contesto prima ancora di cominciare: è spreco su un task
+che non ne ha bisogno.
 
-1. leggere `PROJECT.yaml`;
-2. leggere `RULES.md`;
-3. leggere `STATE.md`;
-4. leggere `TASKS.md`;
-5. leggere `DECISIONS.md`;
-6. leggere `HANDOFF.md`;
-7. controllare Git prima di modificare codice.
+**Sempre** — dove sei e cosa stavi facendo:
 
-Comandi minimi:
+1. `PROJECT.yaml`
+2. `RULES.md` (questo file)
+3. `STATE.md`
+4. `TASKS.md`
+5. `HANDOFF.md`
+6. controllo Git, prima di modificare codice
+
+**Su necessità** — si aprono quando servono, non prima:
+
+| File | Si legge quando |
+|---|---|
+| `MODEL_ROUTING.md` | valuti un'escalation o una delega, o il task non è chiaramente STANDARD |
+| `DECISIONS.md` | tocchi un'area che potrebbe avere una decisione presa, o stai per contraddirne una |
+| `BOOTSTRAP_PROMPT.md` | solo al primo ingresso nel progetto |
+
+Di `DECISIONS.md` scorri comunque **i titoli**: sono poche righe e ti dicono se
+c'è qualcosa che ti riguarda.
+
+Comandi minimi per il punto 6:
 
 ```bash
 git status
@@ -124,9 +138,47 @@ e solo dopo continuare.
 
 **L'agente entrante** non riparte da zero e non rifà il lavoro: legge `HANDOFF.md`, verifica con `git diff` che corrisponda alla realtà, e continua dal punto indicato. Se `HANDOFF.md` e `git diff` divergono, vince `git diff` e va segnalato.
 
+## Scelta del modello
+
+Si usa sempre il **tier più basso che svolge correttamente il task**. I modelli
+premium non sono il default: sono uno strumento di escalation.
+
+**Tabella rapida.** Se il tuo task è in una delle prime due righe hai già deciso,
+e non serve aprire `MODEL_ROUTING.md`:
+
+| Il task è | Tier |
+|---|---|
+| CSS, UI minore, rinomina, documentazione, test banali, contenuti, ricerca riferimenti, CRUD ovvio | `economic` |
+| feature normale, API, componente, refactor locale, bug con causa identificabile, implementazione da specifica chiara | `base` |
+| causa sconosciuta, architettura, più moduli, performance, concorrenza, requisiti ambigui | apri `MODEL_ROUTING.md` |
+| auth, permessi, pagamenti, dati sensibili, migrazioni distruttive, produzione | apri `MODEL_ROUTING.md` |
+
+Se devi far fare un pezzo di lavoro a un modello diverso dal tuo — più alto per
+capire, più basso per sgobbare — non cambi sessione: **apri una sotto-sessione**.
+Procedura in `MODEL_ROUTING.md` → *Delega a sessione separata*.
+
+Le regole minime, che valgono sempre:
+
+- Mai partire dal tier più alto per abitudine.
+- L'escalation deve avere una ragione concreta, scritta in `HANDOFF.md`.
+- **Due tentativi falliti sullo stesso problema fermano il lavoro** e aprono
+  un'escalation. Non un terzo tentativo con lo stesso modello.
+- Dopo pianificazione o root cause analysis, l'esecuzione torna al tier più basso
+  possibile.
+- Più costoso non significa più adatto.
+
+L'agente classifica il task e procede da solo su `SIMPLE` e `STANDARD`. Interrompe
+Federico solo quando l'escalation è materialmente utile, e la spiega in una frase.
+
+Un vincolo in `ai_routing.overrides` vince sulla classificazione: se un tier è
+vietato e il task lo richiederebbe, ci si ferma e lo si scrive, non si aggira.
+
 ## Scelta dell'agente
 
-Il protocollo è model-neutral: nessuna regola qui dipende da un agente specifico.
+Le regole di questo protocollo non dipendono da un agente o da un modello
+specifico: parlano di ruoli e di tier. I nomi propri stanno solo in
+`PROJECT.yaml`, così che cambiare fornitore o generazione di modelli non
+richieda di riscrivere il protocollo.
 
 La scelta di quale agente usare sta in `PROJECT.yaml` sotto `agents`:
 

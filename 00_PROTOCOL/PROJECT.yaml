@@ -1,7 +1,7 @@
 protocol:
   name: adabu-vibecode
   display_name: "Adabù VibeCode Protocol"
-  version: 6
+  version: 7
 
 project:
   name: ""
@@ -21,6 +21,51 @@ agents:
   primary: null
   worked_so_far: []
   constraints: []
+
+# >>> adabu-vibecode:ai_routing >>>
+# ─────────────────────────────────────────────────────────────────────
+# AI ROUTING — quale tier di modello per quale tipo di lavoro.
+# Regole e criteri stanno in MODEL_ROUTING.md, che parla solo di tier.
+#
+# Questo blocco è l'UNICO posto del protocollo dove compaiono nomi di
+# modelli. Quando i modelli cambiano — e cambiano ogni pochi mesi — si
+# aggiornano qui e il resto del protocollo resta valido.
+#
+# Verifica che i nomi corrispondano a ciò a cui l'account ha davvero
+# accesso: un modello annunciato non è un modello disponibile.
+# ─────────────────────────────────────────────────────────────────────
+ai_routing:
+  policy: cost-aware
+  default_tier: base
+
+  tiers:
+    economic:        # SIMPLE: ripetitivo, reversibile, a rischio nullo
+      claude: haiku
+      openai: luna
+      # altri provider (locale, GLM, Kimi, Qwen, DeepSeek, Gemini): aggiungere qui
+    base:            # STANDARD: il default, 60-80% del lavoro
+      claude: sonnet
+      openai: terra
+    premium:         # COMPLEX/CRITICAL: pensare, decidere, sbloccare, verificare
+      claude: opus
+      openai: sol
+
+  escalation:
+    max_base_failures: 2       # due tentativi falliti → STOP, non un terzo tentativo
+    on_low_confidence: true
+    on_high_risk: true
+    on_architecture: true
+
+  deescalation:
+    enabled: true
+    after_plan: true
+    after_root_cause: true
+
+  # Vincoli di questo progetto. Vincono sulla classificazione del task.
+  overrides:
+    forbid_tiers: []           # es. [premium] per un progetto a budget chiuso
+    pin_provider: null         # es. claude, se il progetto deve restare su un solo fornitore
+# <<< adabu-vibecode:ai_routing <<<
 
 # ─────────────────────────────────────────────────────────────────────
 # SYNC — sempre e solo in uscita: repo → esterno. Mai il contrario.

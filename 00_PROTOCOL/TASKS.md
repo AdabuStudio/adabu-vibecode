@@ -1,5 +1,8 @@
 # Tasks
 
+> Un task significativo può portare l'annotazione `Complexity:` e `Tier:`
+> (vedi `MODEL_ROUTING.md`). Non serve sui micro-task.
+
 ## NOW
 
 - [ ] Ricostruire lo stato reale del progetto.

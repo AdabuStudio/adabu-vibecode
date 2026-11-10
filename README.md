@@ -44,7 +44,7 @@ Casi gestiti automaticamente:
 
 Stesso comando. Lo script:
 
-- **sovrascrive** `README.md`, `RULES.md`, `BOOTSTRAP_PROMPT.md` — sono il protocollo, versionato qui
+- **sovrascrive** `README.md`, `RULES.md`, `MODEL_ROUTING.md`, `BOOTSTRAP_PROMPT.md` — sono il protocollo, versionato qui
 - **non tocca** `PROJECT.yaml`, `STATE.md`, `TASKS.md`, `DECISIONS.md`, `HANDOFF.md` — sono il progetto
 - **estende** `AGENTS.md` / `CLAUDE.md` preesistenti anteponendo il blocco di puntamento, senza perdere il contenuto
 
@@ -59,8 +59,9 @@ Ricostruisce lo stato reale dal codice e da Git, compila i file, e si ferma.
 
 | File | Ruolo |
 |---|---|
-| `PROJECT.yaml` | identità, runtime, agenti, routing esterno |
+| `PROJECT.yaml` | identità, runtime, agenti, routing esterno, mappatura tier → modello |
 | `RULES.md` | regole universali — non modificare per progetto |
+| `MODEL_ROUTING.md` | quale tier di modello per quale lavoro, escalation e de-escalation |
 | `STATE.md` | fotografia dello stato adesso |
 | `TASKS.md` | NOW / NEXT / BLOCKED / BACKLOG |
 | `DECISIONS.md` | decisioni tecniche consolidate |
@@ -83,4 +84,5 @@ avc-update .
 
 ## Versione
 
-Protocollo v6 — vedi `00_PROTOCOL/.protocol-version` nei repo installati.
+Protocollo v7 — *Model Routing & Escalation*.
+Vedi `00_PROTOCOL/.protocol-version` nei repo installati.

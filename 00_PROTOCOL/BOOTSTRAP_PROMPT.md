@@ -29,15 +29,19 @@ Non sovrascrivere informazioni utili.
 
 ## Leggi prima
 
+Il bootstrap è **l'unica sessione in cui leggi tutto il protocollo**: dopo, vale
+la lettura a due livelli descritta in `RULES.md`.
+
 Leggi nell'ordine:
 
 1. `00_PROTOCOL/README.md`
 2. `00_PROTOCOL/PROJECT.yaml`
 3. `00_PROTOCOL/RULES.md`
-4. `00_PROTOCOL/STATE.md`
-5. `00_PROTOCOL/TASKS.md`
-6. `00_PROTOCOL/DECISIONS.md`
-7. `00_PROTOCOL/HANDOFF.md`
+4. `00_PROTOCOL/MODEL_ROUTING.md`
+5. `00_PROTOCOL/STATE.md`
+6. `00_PROTOCOL/TASKS.md`
+7. `00_PROTOCOL/DECISIONS.md`
+8. `00_PROTOCOL/HANDOFF.md`
 
 Poi esegui almeno:
 
@@ -146,6 +150,10 @@ Tipi progetto ammessi:
 Non inventare routing ClickUp o Mente-AI.
 
 Se non conosci i valori, lascia `enabled: false` e `null`.
+
+Non toccare `ai_routing`: i default valgono per tutti i progetti. Compila
+`ai_routing.overrides` solo se emerge un vincolo reale di questo progetto
+(budget chiuso, un solo fornitore ammesso) e segnalalo a Federico.
 
 ### STATE.md
 

@@ -9,8 +9,10 @@ Prima di modificare qualsiasi cosa, leggi in ordine:
 2. `00_PROTOCOL/RULES.md`
 3. `00_PROTOCOL/STATE.md`
 4. `00_PROTOCOL/TASKS.md`
-5. `00_PROTOCOL/DECISIONS.md`
-6. `00_PROTOCOL/HANDOFF.md`
+5. `00_PROTOCOL/HANDOFF.md`
+
+Gli altri file del protocollo si aprono **solo quando servono**: `RULES.md` dice
+quali e quando. Non leggerli per abitudine — costa contesto e non serve.
 
 Poi:
 

@@ -8,13 +8,13 @@
 
 set -euo pipefail
 
-PROTOCOL_VERSION=6
+PROTOCOL_VERSION=7
 DIR="00_PROTOCOL"
 TARGET="${1:-$PWD}"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # File di protocollo: sovrascritti ad ogni update.
-PROTOCOL_FILES=(README.md RULES.md BOOTSTRAP_PROMPT.md)
+PROTOCOL_FILES=(README.md RULES.md MODEL_ROUTING.md BOOTSTRAP_PROMPT.md)
 # File di progetto: creati se mancanti, MAI sovrascritti.
 PROJECT_FILES=(PROJECT.yaml STATE.md TASKS.md DECISIONS.md HANDOFF.md)
 
@@ -70,6 +70,27 @@ for f in "${PROJECT_FILES[@]}"; do
     echo "  creato      $DIR/$f"
   fi
 done
+
+# ── protocol.version: è metadato di protocollo, non contenuto di progetto ──
+if grep -qE '^  version: [0-9]+' "$DIR/PROJECT.yaml"; then
+  CUR=$(sed -nE 's/^  version: ([0-9]+).*/\1/p' "$DIR/PROJECT.yaml" | head -1)
+  if [ "$CUR" != "$PROTOCOL_VERSION" ]; then
+    sed -i.bak -E "0,/^  version: [0-9]+/s//  version: $PROTOCOL_VERSION/" "$DIR/PROJECT.yaml"
+    rm -f "$DIR/PROJECT.yaml.bak"
+    echo "  allineato   $DIR/PROJECT.yaml  (protocol.version $CUR → $PROTOCOL_VERSION)"
+  fi
+fi
+
+# ── ai_routing: aggiunto ai PROJECT.yaml che non ce l'hanno (upgrade da v6) ──
+# Unica eccezione alla regola "i file di progetto non si toccano": aggiunge un
+# blocco di configurazione mancante, non modifica nulla di già scritto.
+if ! grep -q '^ai_routing:' "$DIR/PROJECT.yaml"; then
+  { echo
+    awk '/^# >>> adabu-vibecode:ai_routing >>>/,/^# <<< adabu-vibecode:ai_routing <<</' \
+      "$SRC/$DIR/PROJECT.yaml"
+  } >> "$DIR/PROJECT.yaml"
+  echo "  esteso      $DIR/PROJECT.yaml  (aggiunto blocco ai_routing, contenuto preservato)"
+fi
 
 # ── Entrypoint alla root ─────────────────────────────────────────────
 # Se il file esiste già con contenuto proprio, il blocco va in testa e il

@@ -14,16 +14,18 @@ Agenti supportati:
 
 Rendere il repository la fonte di verità operativa condivisa, così che un agente possa continuare il lavoro lasciato da un altro senza dipendere dalla cronologia di una singola chat.
 
-## Ordine di lettura obbligatorio
+## Ordine di lettura
 
-Prima di lavorare, ogni agente deve leggere:
+Sempre, prima di lavorare:
 
 1. `PROJECT.yaml`
 2. `RULES.md`
 3. `STATE.md`
 4. `TASKS.md`
-5. `DECISIONS.md`
-6. `HANDOFF.md`
+5. `HANDOFF.md`
+
+Su necessità: `MODEL_ROUTING.md` (escalation o delega), `DECISIONS.md` (area già
+decisa), `BOOTSTRAP_PROMPT.md` (primo ingresso). `RULES.md` dice quando.
 
 Poi deve controllare:
 
@@ -40,7 +42,8 @@ git log --oneline -10
 - TASKS.md = cosa resta da fare
 - DECISIONS.md = decisioni tecniche consolidate
 - HANDOFF.md = passaggio di consegne corrente
-- PROJECT.yaml = identità e routing esterno
+- PROJECT.yaml = identità, routing esterno, mappatura tier → modello
 - RULES.md = regole universali
+- MODEL_ROUTING.md = quale tier di modello per quale tipo di lavoro
 
 La memoria non deve vivere in una singola chat AI.

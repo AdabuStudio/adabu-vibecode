@@ -8,6 +8,17 @@ Current agent: TO VERIFY
 
 TO VERIFY
 
+## Routing modello
+
+> Compilare quando il task ha richiesto una scelta di tier non ovvia, o quando
+> chi entra dovrebbe girare su un tier diverso da chi esce. Vedi `MODEL_ROUTING.md`.
+
+Task complexity: SIMPLE | STANDARD | COMPLEX | CRITICAL
+Tier usato: economic | base | premium
+Escalation eseguita: no
+Motivo: TO VERIFY
+Tier consigliato per continuare: TO VERIFY
+
 ## Interruzione
 
 > Compilare SOLO se la sessione precedente si è chiusa a metà task
