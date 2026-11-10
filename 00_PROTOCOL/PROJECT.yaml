@@ -26,6 +26,8 @@ agents:
 # ─────────────────────────────────────────────────────────────────────
 # AI ROUTING — quale tier di modello per quale tipo di lavoro.
 # Regole e criteri stanno in MODEL_ROUTING.md, che parla solo di tier.
+# Questi sono i default del team: ogni macchina può sovrascriverli per il
+# proprio harness con 00_PROTOCOL/tiers.sh, senza toccare questo file.
 #
 # Questo blocco è l'UNICO posto del protocollo dove compaiono nomi di
 # modelli. Quando i modelli cambiano — e cambiano ogni pochi mesi — si

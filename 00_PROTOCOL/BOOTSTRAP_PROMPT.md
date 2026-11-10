@@ -154,6 +154,10 @@ Se non conosci i valori, lascia `enabled: false` e `null`.
 Non toccare `ai_routing`: i default valgono per tutti i progetti. Compila
 `ai_routing.overrides` solo se emerge un vincolo reale di questo progetto
 (budget chiuso, un solo fornitore ammesso) e segnalalo a Federico.
+I modelli disponibili su questa macchina non si scrivono qui: lancia
+`00_PROTOCOL/tiers.sh get <tuo harness>` e, se risolve un tier come "non
+configurato", dillo nell'output finale (punto 7) — Federico lo sistema con
+"imposta i tier".
 
 ### STATE.md
 

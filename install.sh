@@ -14,7 +14,7 @@ TARGET="${1:-$PWD}"
 SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # File di protocollo: sovrascritti ad ogni update.
-PROTOCOL_FILES=(README.md RULES.md MODEL_ROUTING.md BOOTSTRAP_PROMPT.md)
+PROTOCOL_FILES=(README.md RULES.md MODEL_ROUTING.md BOOTSTRAP_PROMPT.md tiers.sh)
 # File di progetto: creati se mancanti, MAI sovrascritti.
 PROJECT_FILES=(PROJECT.yaml STATE.md TASKS.md DECISIONS.md HANDOFF.md)
 
@@ -61,6 +61,7 @@ for f in "${PROTOCOL_FILES[@]}"; do
   cp "$SRC/$DIR/$f" "$DIR/$f"
   echo "  aggiornato  $DIR/$f"
 done
+chmod +x "$DIR/tiers.sh"
 
 for f in "${PROJECT_FILES[@]}"; do
   if [ -f "$DIR/$f" ]; then

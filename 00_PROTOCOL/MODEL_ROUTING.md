@@ -13,6 +13,43 @@ cambiano si aggiornano tre righe lì, e il protocollo resta valido.
 | `base` | il default. La maggior parte del lavoro quotidiano |
 | `premium` | ragionare, decidere, sbloccare, verificare |
 
+### Tier locali per harness
+
+`PROJECT.yaml` dice quali modelli usa il team, per fornitore. Ma quali modelli
+ci sono davvero dipende dall'harness e dall'account della macchina: Codex CLI,
+Codex nell'IDE, Claude Code, OpenCode, Kimi non vedono lo stesso elenco.
+
+Per questo ogni macchina può avere la sua mappatura, fuori da qualsiasi repo:
+
+```bash
+00_PROTOCOL/tiers.sh get codex                 # mappatura risolta, con la fonte
+00_PROTOCOL/tiers.sh set codex economic=<m> base=<m> premium=<m>
+00_PROTOCOL/tiers.sh unset codex               # torna ai default di PROJECT.yaml
+```
+
+Il file è `~/.config/adabu-vibecode/tiers.yaml` e vale per tutti i progetti
+della macchina. Il nome dell'harness è libero (`codex`, `claude-code`,
+`opencode`, `kimi`…): `codex` legge i default `openai`, `claude-code` i default
+`claude`, gli altri la chiave con il proprio nome.
+
+Ordine di risoluzione, sempre questo:
+
+1. file locale, sezione del tuo harness;
+2. `PROJECT.yaml` → `ai_routing.tiers.<tier>.<fornitore>`;
+3. niente: lo dici, **non inventi un nome di modello**.
+
+Quando Federico dice **"imposta i tier"**, l'agente:
+
+1. lancia `tiers.sh get <harness>` e mostra cosa risolve oggi;
+2. chiede a Federico i modelli per i tier che vanno cambiati — se l'harness
+   espone l'elenco dei modelli disponibili, lo propone come scelta, altrimenti
+   chiede e basta;
+3. salva con `tiers.sh set` e mostra il risultato.
+
+Non si compila da soli dai nomi visti in documentazione o in altri progetti:
+un modello annunciato non è un modello disponibile. `tiers.sh` non tocca mai
+`PROJECT.yaml` e non va committato niente.
+
 ---
 
 ## I quattro livelli

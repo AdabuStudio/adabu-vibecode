@@ -45,5 +45,6 @@ git log --oneline -10
 - PROJECT.yaml = identità, routing esterno, mappatura tier → modello
 - RULES.md = regole universali
 - MODEL_ROUTING.md = quale tier di modello per quale tipo di lavoro
+- tiers.sh = mappatura tier → modello di questa macchina, per harness (fuori dal repo)
 
 La memoria non deve vivere in una singola chat AI.

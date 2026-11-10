@@ -173,6 +173,11 @@ Federico solo quando l'escalation è materialmente utile, e la spiega in una fra
 Un vincolo in `ai_routing.overrides` vince sulla classificazione: se un tier è
 vietato e il task lo richiederebbe, ci si ferma e lo si scrive, non si aggira.
 
+Il nome del modello per un tier lo dà `00_PROTOCOL/tiers.sh get <harness>`:
+prima la mappatura locale della macchina, poi `PROJECT.yaml`. Il comando
+**"imposta i tier"** la configura — procedura in `MODEL_ROUTING.md` → *Tier
+locali per harness*.
+
 ## Scelta dell'agente
 
 Le regole di questo protocollo non dipendono da un agente o da un modello
