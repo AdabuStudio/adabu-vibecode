@@ -46,6 +46,8 @@ Stesso comando. Lo script:
 
 - **sovrascrive** `README.md`, `RULES.md`, `MODEL_ROUTING.md`, `BOOTSTRAP_PROMPT.md`, `tiers.sh` — sono il protocollo, versionato qui
 - **non tocca** `PROJECT.yaml`, `STATE.md`, `TASKS.md`, `DECISIONS.md`, `HANDOFF.md` — sono il progetto
+- **aggiunge** a `PROJECT.yaml` i blocchi nuovi che mancano (`ai_routing`, `host`, `agents.workers`/`secrets`), senza cambiare ciò che c'è
+- **crea** `paseo.json` alla radice se manca; se il progetto ne ha uno diverso non lo tocca e avvisa
 - **estende** `AGENTS.md` / `CLAUDE.md` preesistenti anteponendo il blocco di puntamento, senza perdere il contenuto
 
 È idempotente: rieseguirlo non fa danni.
@@ -68,7 +70,9 @@ Ricostruisce lo stato reale dal codice e da Git, compila i file, e si ferma.
 | `DECISIONS.md` | decisioni tecniche consolidate |
 | `HANDOFF.md` | passaggio di consegne corrente — effimero |
 
-Alla root: `AGENTS.md` e `CLAUDE.md` puntano qui dentro. Servono perché ogni
+Alla root: `paseo.json` prepara i worktree dei worker Paseo (su altair collega
+i segreti di sviluppo con `~/bin/collega-segreti.sh`, altrove non fa niente;
+non contiene segreti). `AGENTS.md` e `CLAUDE.md` puntano qui dentro. Servono perché ogni
 agente al boot legge un file diverso.
 
 ## Nei workspace Coder

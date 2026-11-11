@@ -17,9 +17,25 @@ repository:
   current_branch: ""
   main_branch: ""
 
+# >>> adabu-vibecode:host >>>
+host:
+  # dove vive la copia di lavoro canonica; vuoto = solo il portatile di Federico
+  canonical: ""            # es. "altair:~/cosmo/dev/<slug>"
+# <<< adabu-vibecode:host <<<
+
 agents:
   primary: null
   worked_so_far: []
+  # >>> adabu-vibecode:workers >>>
+  # worker ammessi su questo repo, e per cosa
+  workers:
+    - "sonnet: default"
+    - "opus: solo su richiesta di Federico"
+    - "codex: quando lo chiede Federico"
+    - "go (modelli economici OpenCode Go): solo lavoro meccanico con test"
+  # credenziali che i worker possono avere
+  secrets: "solo di sviluppo (es. DB di staging), mai produzione né account reali di terzi"
+  # <<< adabu-vibecode:workers <<<
   constraints: []
 
 # >>> adabu-vibecode:ai_routing >>>

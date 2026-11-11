@@ -29,6 +29,10 @@ Non sovrascrivere informazioni utili.
 
 ## Leggi prima
 
+Prima di tutto verifica su quale macchina sei (`hostname`): le regole della macchina,
+se esistono, sono già nelle istruzioni globali del tuo strumento e valgono insieme
+a quelle del protocollo.
+
 Il bootstrap è **l'unica sessione in cui leggi tutto il protocollo**: dopo, vale
 la lettura a due livelli descritta in `RULES.md`.
 

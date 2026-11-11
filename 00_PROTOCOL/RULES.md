@@ -142,6 +142,23 @@ e solo dopo continuare.
 
 **L'agente entrante** non riparte da zero e non rifà il lavoro: legge `HANDOFF.md`, verifica con `git diff` che corrisponda alla realtà, e continua dal punto indicato. Se `HANDOFF.md` e `git diff` divergono, vince `git diff` e va segnalato.
 
+## Worker in parallelo
+
+Un worker è un agente lanciato da un orchestratore (es. Paseo) su un task
+delimitato, mentre nessuno guarda.
+
+- Lavora in un **worktree suo**, su un branch `agenti/<task-slug>`, mai su `main`.
+- Committa con la **sua identità** (es. "Agente Claude (altair)"), così il log
+  distingue il lavoro degli agenti da quello di Federico.
+- **Non fa push** e non rilascia: consegna un branch, Federico approva il diff o la PR.
+- **Non lancia altri worker.**
+- A fine lavoro scrive `HANDOFF.md` **nel suo worktree**: cosa ha fatto, cosa resta,
+  cosa NON ha verificato. Se si interrompe, sezione **Interruzione** come sopra.
+- Se il task richiede un accesso che il worker non ha (database, chiavi, pannelli),
+  si ferma e lo scrive: non lo cerca e non lo chiede in chat.
+- Mai stampare valori di segreti (`.env`) in chat o nei log: al massimo i nomi
+  delle variabili.
+
 ## Scelta del modello
 
 Si usa sempre il **tier più basso che svolge correttamente il task**. I modelli

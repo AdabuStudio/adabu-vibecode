@@ -1,0 +1,5 @@
+{
+  "worktree": {
+    "setup": "[ -x \"$HOME/bin/collega-segreti.sh\" ] && \"$HOME/bin/collega-segreti.sh\" \"$PASEO_WORKTREE_PATH\" || true"
+  }
+}

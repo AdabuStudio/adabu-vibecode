@@ -96,6 +96,57 @@ if ! grep -q '^ai_routing:' "$DIR/PROJECT.yaml"; then
   echo "  esteso      $DIR/PROJECT.yaml  (aggiunto blocco ai_routing, contenuto preservato)"
 fi
 
+# ── host / agents.workers: aggiunti ai PROJECT.yaml che non li hanno ──
+# Stessa eccezione di ai_routing: si aggiunge, non si cambia nulla di scritto.
+# host va subito prima di `agents:`; workers/secrets subito dentro `agents:`.
+# I blocchi passano da file e non da `awk -v`: l'awk di macOS rifiuta le
+# stringhe con a capo.
+BLK=$(mktemp)
+block() { awk "/^ *# >>> adabu-vibecode:$1 >>>/,/^ *# <<< adabu-vibecode:$1 <<</" "$SRC/$DIR/PROJECT.yaml" > "$BLK"; }
+
+if ! grep -q '^host:' "$DIR/PROJECT.yaml"; then
+  block host
+  if grep -q '^agents:' "$DIR/PROJECT.yaml"; then
+    awk -v f="$BLK" '!done && /^agents:/ { while ((getline l < f) > 0) print l; print ""; done=1 } { print }' \
+      "$DIR/PROJECT.yaml" > "$DIR/PROJECT.yaml.tmp"
+    mv "$DIR/PROJECT.yaml.tmp" "$DIR/PROJECT.yaml"
+  else
+    { echo; cat "$BLK"; } >> "$DIR/PROJECT.yaml"
+  fi
+  echo "  esteso      $DIR/PROJECT.yaml  (aggiunto blocco host, contenuto preservato)"
+fi
+
+if ! grep -q '^  workers:' "$DIR/PROJECT.yaml"; then
+  if grep -qE '^agents:[[:space:]]*$' "$DIR/PROJECT.yaml"; then
+    block workers
+    # dopo `agents:` e dopo le chiavi semplici che seguono (primary, worked_so_far)
+    awk -v f="$BLK" '
+      function blk() { while ((getline l < f) > 0) print l; done=1; inag=0 }
+      /^agents:[[:space:]]*$/ { inag=1; print; next }
+      inag && !done && !/^  (primary|worked_so_far):/ { blk() }
+      { print }
+      END { if (inag && !done) blk() }' \
+      "$DIR/PROJECT.yaml" > "$DIR/PROJECT.yaml.tmp"
+    mv "$DIR/PROJECT.yaml.tmp" "$DIR/PROJECT.yaml"
+    echo "  esteso      $DIR/PROJECT.yaml  (aggiunti agents.workers e secrets)"
+  else
+    echo "  ATTENZIONE  $DIR/PROJECT.yaml  senza blocco agents: aggiungi workers/secrets a mano"
+  fi
+fi
+rm -f "$BLK"
+
+# ── paseo.json: setup dei worktree di Paseo (collega i segreti su altair) ──
+# Creato se manca. Se il progetto ne ha uno suo, diverso, non si tocca.
+if [ ! -f paseo.json ]; then
+  cp "$SRC/paseo.json" paseo.json
+  echo "  creato      paseo.json"
+elif cmp -s "$SRC/paseo.json" paseo.json; then
+  echo "  invariato   paseo.json"
+else
+  echo "  ATTENZIONE  paseo.json  esiste ed è diverso dal protocollo: non toccato."
+  echo "              Confrontalo con $SRC/paseo.json"
+fi
+
 # ── Entrypoint alla root ─────────────────────────────────────────────
 # Se il file esiste già con contenuto proprio, il blocco va in testa e il
 # resto resta intatto. Il marker evita di inserirlo due volte.
