@@ -14,6 +14,9 @@ che non ne ha bisogno.
 4. `TASKS.md`
 5. `HANDOFF.md`
 6. controllo Git, prima di modificare codice
+7. verificare **su quale macchina** stai lavorando (`hostname`). Le regole della
+   macchina, se ci sono, le hai già nelle istruzioni globali del tuo strumento
+   (su altair: `~/cosmo/ALTAIR.md`): valgono insieme a queste.
 
 **Su necessità** — si aprono quando servono, non prima:
 
@@ -26,9 +29,10 @@ che non ne ha bisogno.
 Di `DECISIONS.md` scorri comunque **i titoli**: sono poche righe e ti dicono se
 c'è qualcosa che ti riguarda.
 
-Comandi minimi per il punto 6:
+Comandi minimi per i punti 6 e 7:
 
 ```bash
+hostname
 git status
 git branch --show-current
 git log --oneline -10
