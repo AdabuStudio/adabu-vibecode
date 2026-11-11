@@ -28,7 +28,9 @@ if [ ! -d .git ]; then
 fi
 
 # ── .gitignore: garantisce le esclusioni minime ──────────────────────
+# *.sql blocca i dump; le migrazioni di schema restano tracciate (negazioni dopo).
 IGNORE=(".env" ".env.local" "wp-config.php" "*.sql" "*.sql.gz" "*.pem" "*.key"
+        "!**/migrations/**/*.sql" "!**/migrazioni/**/*.sql" "!**/drizzle/**/*.sql"
         "id_rsa" "node_modules/" ".DS_Store" "wp-content/uploads/" "vendor/")
 touch .gitignore
 ADDED=0
@@ -38,8 +40,12 @@ done
 [ "$ADDED" -gt 0 ] && echo "  esteso      .gitignore  (+$ADDED regole)"
 
 # ── Scansione segreti tra i file GIÀ TRACCIATI ───────────────────────
-LEAKS=$(git ls-files 2>/dev/null | grep -Ei '(^|/)(wp-config\.php|\.env(\.|$)|.*\.sql$|.*\.pem$|.*\.key$|id_rsa)' || true)
-CONTENT=$(git grep -lEi '(AKIA[0-9A-Z]{16}|BEGIN (RSA|OPENSSH) PRIVATE KEY|DB_PASSWORD[[:space:]]*[,=])' -- . 2>/dev/null || true)
+# Non sono segreti: i modelli .env.example/.sample/.template/.dist e le
+# migrazioni di schema in migrations/, migrazioni/, drizzle/.
+SAFE='(^|/)\.env\.(example|sample|template|dist)$|(^|/)(migrations|migrazioni|drizzle)/(.*/)?[^/]*\.sql$'
+LEAKS=$(git ls-files 2>/dev/null | grep -Ei '(^|/)(wp-config\.php|\.env(\.|$)|.*\.sql$|.*\.pem$|.*\.key$|id_rsa)' | grep -Evi "$SAFE" || true)
+CONTENT=$( { git grep -lE '(AKIA[0-9A-Z]{16}|BEGIN (RSA|OPENSSH) PRIVATE KEY)' -- . 2>/dev/null
+             git grep -lEi 'DB_PASSWORD[[:space:]]*[,=]' -- . 2>/dev/null | grep -Evi "$SAFE"; } || true)
 LEAKS=$(printf '%s\n%s\n' "$LEAKS" "$CONTENT" | sed '/^$/d' | sort -u)
 
 # ── Memoria operativa sparsa, da migrare nel protocollo ──────────────
